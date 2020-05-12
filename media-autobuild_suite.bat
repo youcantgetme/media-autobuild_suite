@@ -115,7 +115,7 @@ libopenmpt version3
 :: options also available with the suite
 set ffmpeg_options_full=chromaprint decklink frei0r libbs2b libcaca ^
 libcdio libfdk-aac libflite libfribidi libgme libgsm libilbc libsvthevc libsvtav1 ^
-#libsvtvp9 libkvazaar libmodplug librtmp librubberband #libssh libtesseract libxavs ^
+#libsvtvp9 libkvazaar libmodplug libndi_newtek librubberband #libssh libtesseract libxavs ^
 libzmq libzvbi openal libvmaf libcodec2 libsrt ladspa librav1e #vapoursynth #liblensfun
 
 :: options also available with the suite that add shared dependencies
@@ -736,7 +736,7 @@ if %ffmpegChoiceINI%==0 (
 if "%buildffmpegChoice%"=="" GOTO ffmpegChoice
 if %buildffmpegChoice%==1 (
     set "ffmpegChoice=y"
-    if not exist %build%\ffmpeg_options.txt (
+    if 1==1 (
         (
             echo.# Lines starting with this character are ignored
             echo.# To override some options specifically for the shared build, create a ffmpeg_options_shared.txt file.
@@ -762,7 +762,6 @@ if %buildffmpegChoice%==1 (
         echo.
         echo. Edit it now or leave it unedited to compile according to defaults.
         echo -------------------------------------------------------------------------------
-        pause
         )
     if not exist %build%\mpv_options.txt (
         (
