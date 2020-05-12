@@ -1397,7 +1397,7 @@ rem used to be http://repo.msys2.org/distrib/msys2-%msysprefix%-latest.tar.xz
         echo -------------------------------------------------------------------------------
         7z >nul 2>&1 || 7za >nul 2>&1 || powershell -NoProfile -NonInteractive -Command (New-Object System.Net.WebClient^).DownloadFile('https://github.com/chocolatey/chocolatey.org/raw/master/chocolatey/Website/7za.exe', '7za.exe'^)
         7z >nul 2>&1 && 7z x msys2-base.tar.xz -so | 7z x -aoa -si -ttar -o.. || 7za x msys2-base.tar.xz -so | 7za x -aoa -si -ttar -o..
-        if exist 7za.exe del 7za.exe
+        rem if exist 7za.exe del 7za.exe
     )
 
     if not exist %instdir%\%msys2%\usr\bin\msys-2.0.dll (
