@@ -1366,6 +1366,48 @@ if [[ $ffmpeg != no ]] && enabled libmfx &&
     do_checkIfExist
 fi
 
+if [[ $ffmpeg != "no" ]] && enabled_any libndi-newtek &&
+    [[ -f "$LOCALDESTDIR/NDI40SDK/Include/Processing.NDI.Lib.h" ]]; then
+    _includedir="$(cygpath -sm "$LOCALDESTDIR"/NDI40SDK/Include)"
+    [[ $bits = 32bit ]] && _arch=x86 || _arch=x64
+	
+	echo $NDI_SDK_DIR
+    echo -e "${green}Compiling ffmpeg with Newtek lib${reset}"
+    echo -e "${orange}ffmpeg and apps that use it will depend on${reset}"
+    echo -e "$(cygpath -m $LOCALDESTDIR/bin-video/Processing.NDI.Lib.${_arch}.dll) to run!${reset}"
+
+    # if installed libndi.a is older than dll or main include file
+    _check=(Processing.NDI.Lib.h libndi.a bin-video/Processing.NDI.Lib.${_arch}.dll)
+    if test_newer installed "$LOCALDESTDIR/bin-video/Processing.NDI.Lib.${_arch}.dll" \
+        "$_includedir/Processing.NDI.Lib.h" libndi.a || ! files_exist "${_check[@]}"; then
+        mkdir -p "$LOCALBUILDDIR/newtek"
+        pushd "$LOCALBUILDDIR/newtek" >/dev/null
+
+        # install headers
+        cmake -E copy_directory "$_includedir" "$LOCALDESTDIR/include"
+
+        # fix ffmpeg breakage when compiling shared
+        sed -i 's|__declspec(dllexport)||g' "$LOCALDESTDIR"/include/Processing.NDI.Lib.h
+
+        # create import lib and install redistributable dll
+        create_build_dir
+        cp -f "$LOCALDESTDIR/NDI40SDK/Bin/x64/Processing.NDI.Lib.${_arch}.dll" .
+        gendef - ./Processing.NDI.Lib.${_arch}.dll 2>/dev/null |
+            sed -r -e 's|^_||' -e 's|@[1-9]+$||' > "libndi.def"
+        dlltool -l "libndi.a" -d "libndi.def" \
+            $([[ $bits = 32bit ]] && echo "-U") 2>/dev/null
+        [[ -f libndi.a ]] && do_install "libndi.a"
+        #do_install ./Processing.NDI.Lib.${_arch}.dll bin-video/
+        do_checkIfExist
+        add_to_remove
+        popd >/dev/null
+    fi
+    unset _arch _includedir
+elif [[ $ffmpeg != "no" ]] && enabled libndi-newtek; then
+    do_print_status "Newtek SDK" "$orange" "Not installed, disabling"
+    do_removeOption --enable-libndi-newtek
+fi
+
 _check=(AMF/core/Version.h)
 if [[ $ffmpeg != no ]] && { enabled amf || ! disabled_any autodetect amf; } &&
     do_vcs "https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git"; then
@@ -1988,8 +2030,8 @@ if [[ $ffmpeg != no ]]; then
             fi
             do_uninstall bin-video/ff{mpeg,play,probe}.exe{,.debug} "${_uninstall[@]}"
             create_build_dir static
-            config_path=.. CFLAGS="${ffmpeg_cflags:-$CFLAGS}" \
-            cc=$CC cxx=$CXX LDFLAGS+=" -L$LOCALDESTDIR/lib -L$MINGW_PREFIX/lib" \
+            config_path=.. CFLAGS="${ffmpeg_cflags:-$CFLAGS}" -I$LOCALDESTDIR/local64/NDI40SDK/Include" \
+            cc=$CC cxx=$CXX LDFLAGS+=" -L$LOCALDESTDIR/lib -L$MINGW_PREFIX/lib" -L$LOCALDESTDIR/local64/NDI40SDK/Include" \
                 do_configure \
                 --bindir="$LOCALDESTDIR/bin-video" "${FFMPEG_OPTS[@]}"
             # cosmetics
