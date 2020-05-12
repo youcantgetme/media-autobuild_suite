@@ -579,7 +579,7 @@ do_pack() {
     local cmd=(/opt/bin/upx -9 -qq)
     local nopack=""
     local exts="exe|dll"
-    [[ $bits == 64bit ]] && enabled_any libtls openssl && nopack="ffmpeg|mplayer|mpv"
+    [[ $bits == 64bit ]] && enabled_any libtls openssl && nopack="libndi_newtek|ffmpeg|ffplay|ffprobe|mplayer|mpv"
     for file; do
         if [[ $file =~ \.($exts)$ && ! $file =~ ($nopack)\.exe$ ]]; then
             do_print_progress Packing with UPX
@@ -881,10 +881,15 @@ do_getFFmpegConfig() {
         # fallback to schannel if no other tls libs are enabled
         do_addOption --enable-schannel
     fi
-
-    enabled_any lib{vo-aacenc,aacplus,utvideo,dcadec,faac,ebur128,ndi_newtek,ndi-newtek,ssh} netcdf &&
-        do_removeOption "--enable-(lib(vo-aacenc|aacplus|utvideo|dcadec|faac|ebur128|ndi_newtek|ndi-newtek|ssh)|netcdf)" &&
-        sed -ri 's;--enable-(lib(vo-aacenc|aacplus|utvideo|dcadec|faac|ebur128|ndi_newtek|ndi-newtek|ssh)|netcdf);;g' \
+    
+    if enabled libndi_newtek; then
+        do_removeOption --enable-libndi_newtek
+        do_addOption --enable-libndi-newtek
+    fi
+    
+    enabled_any lib{vo-aacenc,aacplus,utvideo,dcadec,faac,ebur128,ssh} netcdf &&
+        do_removeOption "--enable-(lib(vo-aacenc|aacplus|utvideo|dcadec|faac|ebur128|ssh)|netcdf)" &&
+        sed -ri 's;--enable-(lib(vo-aacenc|aacplus|utvideo|dcadec|faac|ebur128|ssh)|netcdf);;g' \
             "$LOCALBUILDDIR/ffmpeg_options.txt"
 }
 
