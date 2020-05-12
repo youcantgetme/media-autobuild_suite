@@ -108,15 +108,15 @@ libdav1d libaom --disable-debug
 :: options used in zeranoe builds and not present above
 set ffmpeg_options_zeranoe=fontconfig gnutls libass libbluray libfreetype ^
 libmfx libmysofa libopencore-amrnb libopencore-amrwb libopenjpeg libsnappy ^
-libsoxr libspeex libtheora libtwolame libvidstab libvo-amrwbenc libwavpack ^
+libsoxr libspeex libtheora libtwolame #libvidstab libvo-amrwbenc libwavpack ^
 libwebp libxml2 libzimg libshine gpl openssl libtls avisynth mbedtls libxvid ^
 libopenmpt version3
 
 :: options also available with the suite
 set ffmpeg_options_full=chromaprint decklink frei0r libbs2b libcaca ^
-libcdio libfdk-aac libflite libfribidi libgme libgsm libilbc libsvthevc libsvtav1 ^
-#libsvtvp9 libkvazaar libmodplug libndi_newtek librubberband #libssh libtesseract libxavs ^
-libzmq libzvbi openal libvmaf libcodec2 libsrt ladspa librav1e #vapoursynth #liblensfun
+libcdio libfdk-aac #libflite libfribidi libgme libgsm libilbc libsvthevc libsvtav1 ^
+#libsvtvp9 libkvazaar libmodplug libndi_newtek librubberband #libssh libtesseract #libxavs ^
+libzmq libzvbi #openal libvmaf libcodec2 libsrt ladspa #librav1e #vapoursynth #liblensfun
 
 :: options also available with the suite that add shared dependencies
 set ffmpeg_options_full_shared=opencl opengl cuda-nvcc libnpp libopenh264
@@ -1861,6 +1861,8 @@ if not exist %instdir%\%msys2%\mingw%1\bin\gcc.exe (
     echo.
     echo.MinGW%1 GCC compiler isn't installed; maybe the download didn't work
     echo.Do you want to try it again?
+    echo.
+    echo.If you see this message on first run , just close this window and rerun.
     echo.
     echo -------------------------------------------------------------------------------
     set /P try="try again [y/n]: "

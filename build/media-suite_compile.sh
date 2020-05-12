@@ -1371,7 +1371,6 @@ if [[ $ffmpeg != "no" ]] && enabled_any libndi-newtek &&
     _includedir="$(cygpath -sm "$LOCALDESTDIR"/NDI40SDK/Include)"
     [[ $bits = 32bit ]] && _arch=x86 || _arch=x64
 	
-	echo $NDI_SDK_DIR
     echo -e "${green}Compiling ffmpeg with Newtek lib${reset}"
     echo -e "${orange}ffmpeg and apps that use it will depend on${reset}"
     echo -e "$(cygpath -m $LOCALDESTDIR/bin-video/Processing.NDI.Lib.${_arch}.dll) to run!${reset}"
