@@ -1901,7 +1901,7 @@ if [[ $ffmpeg != no ]]; then
     # todo: make this more easily customizable
     [[ $ffmpegUpdate = y ]] && enabled_any lib{aom,tesseract,vmaf,x265,vpx} &&
         _deps=(lib{aom,tesseract,vmaf,x265,vpx}.a)
-    if do_vcs "https://git.ffmpeg.org/ffmpeg.git"; then
+    if do_vcs "https://github.com/youcantgetme/FFmpeg.git"; then
 
         # See issue https://github.com/OpenVisualCloud/SVT-AV1/issues/567 for the reasons behind the follow codeblock:
         # start of SVT-AV1 temporary measures
