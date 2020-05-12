@@ -1,16 +1,10 @@
-# media-autobuild_suite
+# media-autobuild_suite with NDI 4.5 support
 
 Before opening an issue, check if it's an issue directly from executing the suite. This isn't Doom9, reddit, stackoverflow or any other forum for general questions about the things being compiled. This script builds them, that's all.
 
 This source code is also mirrored in [GitLab](https://gitlab.com/RiCON/media-autobuild_suite).
 
 Most git sources in the suite use GitHub, so if it's down, it's probably useless to run the suite at that time.
-
-## Download
-
-**[Click here to download latest version](https://github.com/jb-alvarado/media-autobuild_suite/archive/master.zip)**
-
-For information about the compiler environment see the wiki, there you also have a example of how to compile your own tools.
 
 ## Included Tools And Libraries
 
@@ -81,6 +75,8 @@ For information about the compiler environment see the wiki, there you also have
             - needs non-free license
         - decklink (10.9.3)
             - needs non-free license
+        - libndi-newtek (4.5.1)
+            - needs non-free license
         - frei0r (git)
         - ladspa (mingw)
         - libbs2b (3.1.0)
@@ -102,7 +98,6 @@ For information about the compiler environment see the wiki, there you also have
             - needs non-free license
         - libopenh264 (official binaries)
         - librav1e (git)
-        - librtmp (git)
         - librubberband (git snapshot)
         - libsrt (git)
         - libssh (broken)
@@ -197,6 +192,8 @@ For information about the compiler environment see the wiki, there you also have
 ## Information
 
 --------
+Download NDI SDK from 
+<http://new.tk/NDISDK>
 
 This tool is inspired by the very nice, linux cross-compiling tool from Roger Pack (rdp):
 <https://github.com/rdp/ffmpeg-windows-build-helpers>
