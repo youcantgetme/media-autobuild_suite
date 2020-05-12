@@ -1391,13 +1391,13 @@ if [[ $ffmpeg != "no" ]] && enabled_any libndi-newtek &&
 
         # create import lib and install redistributable dll
         create_build_dir
-        cp -f "$LOCALDESTDIR/NDI40SDK/Bin/x64/Processing.NDI.Lib.${_arch}.dll" .
+        cp -f "$LOCALDESTDIR/NDI40SDK/bin-video/Processing.NDI.Lib.${_arch}.dll" .
         gendef - ./Processing.NDI.Lib.${_arch}.dll 2>/dev/null |
             sed -r -e 's|^_||' -e 's|@[1-9]+$||' > "libndi.def"
         dlltool -l "libndi.a" -d "libndi.def" \
             $([[ $bits = 32bit ]] && echo "-U") 2>/dev/null
         [[ -f libndi.a ]] && do_install "libndi.a"
-        #do_install ./Processing.NDI.Lib.${_arch}.dll bin-video/
+        do_install ./Processing.NDI.Lib.${_arch}.dll bin-video/
         do_checkIfExist
         add_to_remove
         popd >/dev/null
@@ -2030,8 +2030,8 @@ if [[ $ffmpeg != no ]]; then
             fi
             do_uninstall bin-video/ff{mpeg,play,probe}.exe{,.debug} "${_uninstall[@]}"
             create_build_dir static
-            config_path=.. CFLAGS="${ffmpeg_cflags:-$CFLAGS}" -I$LOCALDESTDIR/local64/NDI40SDK/Include" \
-            cc=$CC cxx=$CXX LDFLAGS+=" -L$LOCALDESTDIR/lib -L$MINGW_PREFIX/lib" -L$LOCALDESTDIR/local64/NDI40SDK/Include" \
+            config_path=.. CFLAGS="${ffmpeg_cflags:-$CFLAGS} -I$LOCALDESTDIR/local64/NDI40SDK/Include" \
+            cc=$CC cxx=$CXX LDFLAGS+=" -L$LOCALDESTDIR/lib -L$MINGW_PREFIX/lib -L$LOCALDESTDIR/local64/NDI40SDK/Include" \
                 do_configure \
                 --bindir="$LOCALDESTDIR/bin-video" "${FFMPEG_OPTS[@]}"
             # cosmetics
